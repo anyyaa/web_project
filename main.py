@@ -18,11 +18,6 @@ intents.members = True
 dashes = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
 
 
-def get_quote():
-    response = requests.get("https://zenquotes.io/api/random")
-    json_data = json.loads(response.text)
-    quote = json_data[0]['q'] + " -" + json_data[0]['a']
-    return (quote)
 
 
 class RandomThings(commands.Cog):
