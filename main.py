@@ -1,11 +1,11 @@
-from tokens import TOKEN, weather_api
+from tokens import TOKEN
 import discord
 from discord.ext import commands
 import random, logging
 import asyncio
 import requests
 import json
-from geopy.geocoders import Nominatim
+from get_weather import get_weather, get_weather_days
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -18,12 +18,18 @@ intents.members = True
 dashes = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
 
 
+def get_quote():
+    response = requests.get("https://zenquotes.io/api/random")
+    json_data = json.loads(response.text)
+    quote = json_data[0]['q'] + " -" + json_data[0]['a']
+    return (quote)
 
 
 class RandomThings(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.city = 'saratov'
 
     @commands.command(name='roll_dice')
     async def roll_dice(self, ctx, count):
@@ -58,21 +64,24 @@ class RandomThings(commands.Cog):
         resp = json_response["message"]
         await ctx.send(resp)
 
+    @commands.command(name='create_pack')
+    async def create_pack(self, ctx):
+        await ctx.send(f'Для создания пака перейдите по ссылке: ')
+
+    @commands.command(name='place')
+    async def change_place(self, city='Moscow'):
+        self.city = city
+
+    @commands.command(name='current')
+    async def weather_rn(self, ctx):
+        await ctx.send(get_weather(self.city))
+
     @commands.command(name='weather')
-    async def weather(self, ctx, city):
-        geolocator = Nominatim(user_agent='weather-bot')
-        location = geolocator.geocode(city)
-        lat = location.latitude
-        long = location.longitude
-        weather_req = requests.get(
-            'https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&appid={}'.format(lat, long, weather_api))
-        current_weather = json.loads(weather_req.text)['current']
-        temp = round(current_weather['temp'] - 273.15)
-        feels_like = round(current_weather['feels_like'] - 273.15)
-        clouds = current_weather['clouds']
-        wind_speed = current_weather['wind_speed']
-        await ctx.send(f'Сейчас температура воздуха - {temp} градусов, ощущается как {feels_like} градусов, '
-                       f'облачность - {clouds}%, скорость ветра - {wind_speed}м/с')
+    async def weather_with_days(self, ctx, days):
+        a = get_weather_days(days, self.city)
+        print(a)
+        for i in range(int(days)):
+            await ctx.send(f'{a[0][i]}, {a[1][i]}, {a[2][i]}, {a[3][i]}, {a[4][i]}')
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
