@@ -4,8 +4,9 @@ from discord.ext import commands
 import random, logging
 import asyncio
 import requests
-import json
 from get_weather import get_weather, get_weather_days
+from truth_dare import truth, dare, append_truth, append_dare, get_quote
+from translater import translate
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -15,28 +16,15 @@ logger.addHandler(handler)
 
 intents = discord.Intents.default()
 intents.members = True
-dashes = ['\u2680', '\u2681', '\u2682', '\u2683', '\u2684', '\u2685']
 
 
-def get_quote():
-    response = requests.get("https://zenquotes.io/api/random")
-    json_data = json.loads(response.text)
-    quote = json_data[0]['q'] + " -" + json_data[0]['a']
-    return (quote)
-
-
-class RandomThings(commands.Cog):
+class Commands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
         self.city = 'saratov'
 
-    @commands.command(name='roll_dice')
-    async def roll_dice(self, ctx, count):
-        res = [random.choice(dashes) for _ in range(int(count))]
-        await ctx.send(" ".join(res))
-
-    @commands.command(name='randint')
+    @commands.command(name='random_user')
     async def my_randint(self, ctx, min_int, max_int):
         num = random.randint(int(min_int), int(max_int))
         await ctx.send(num)
@@ -83,7 +71,53 @@ class RandomThings(commands.Cog):
         for i in range(int(days)):
             await ctx.send(f'{a[0][i]}, {a[1][i]}, {a[2][i]}, {a[3][i]}, {a[4][i]}')
 
+    @commands.command(name='truth')
+    async def truth(self, ctx, member):
+        await ctx.send(f'{member} {truth()}')
+
+    @commands.command(name='dare')
+    async def dare(self, ctx, member):
+        await ctx.send(f'{member} {dare()}')
+
+    @commands.command(name='append_truth')
+    async def append_t(self, ctx, *question):
+        append_truth(question)
+        await ctx.send('done!')
+
+    @commands.command(name='append_dare')
+    async def append_d(self, ctx, *action):
+        append_dare(action)
+        await ctx.send('done!')
+
+    @commands.command(name='translate')
+    async def translate(self, ctx, *words):
+        await ctx.send(translate(words[:-1], words[-1]))
+
+    @commands.command(name='quote')
+    async def quote(self, ctx):
+        text = get_quote().split('-')[0]
+        author = get_quote().split('-')[1]
+        await ctx.send(f"_{text}_ - {author}")
+
+    @commands.command(name='info')
+    async def help(self, ctx):
+        embed_obj = discord.Embed()
+        embed_obj.description = "текст"
+        await ctx.send(f"```set_timer - таймер, время указывается в секундах\n"
+                       f"cat/dog - рандомные картинки с милыми животными\n"
+                       f"create_pack - создание пака для викторины\n"
+                       f"place - смена местаположения для отображения погоды\n"
+                       f"current - прогноз погоды на сегодня в указанном местоположении\n"
+                       f"weather - прогноз погоды на несколько дней (до 8) в указанном местоположении\n"
+                       f"random_user - рандомный пользователь в канале\n"
+                       f"truth - задание для правды в правда или действие\n"
+                       f"dare - задание для действия в правда или действие\n"
+                       f"translate - перевод введенного текста, вводится сначала текст для перевода, "
+                       f"потом язык, на который нужно перевести\n"
+                       f"append_dare/append_truth - добавление заданий для правды или действия\n"
+                       f"get_quote - цитаты известных```")
+
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-bot.add_cog(RandomThings(bot))
+bot.add_cog(Commands(bot))
 bot.run(TOKEN)
