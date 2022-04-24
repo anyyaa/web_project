@@ -27,13 +27,14 @@ def create_pack():
             var4 = input('Введите 4-й вариант: ')
             pack.append([quest, var1, var2, var3, var4])
 
+    print(pack)
     return pack
 
 
 def main():
 
     filename = input('Введите имя файла: ')
-    new_file = open(filename + '.csv', mode='w')
+    new_file = open(filename + '.csv', mode='w', newline='')
     writer = csv.writer(new_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
     new_pack = create_pack()

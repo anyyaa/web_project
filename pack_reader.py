@@ -3,16 +3,16 @@ from pprint import pprint
 
 
 def load_pack(filename):
-    file = open(filename, mode='r', encoding='utf-8')
+    file = open(filename, mode='r', encoding='windows-1251')
     reader = csv.reader(file, delimiter=';', quotechar='"')
     data = list(reader)
 
-    rounds_num = int(data[0][1])
+    rounds_num = int(data[0][3])
     pack_name = data[0][0]
-    date = data[0][3]
-    authors = data[0][2]
+    date = data[0][2]
+    authors = data[0][1]
 
-    greet_string = f'Пак {pack_name}, создатели: {authors}, дата создания: {date}, количество раундов: {rounds_num}'
+    greet_string = [pack_name, authors, date, rounds_num]
     quiz = []
     delta = 0
 
@@ -20,6 +20,7 @@ def load_pack(filename):
 
         round_title = data[1 + delta]
         quest_num = int(round_title[2])
+
         round_data = [round_title]
 
         for i in range(1 + delta + 1, 1 + delta + quest_num + 1):
@@ -29,3 +30,6 @@ def load_pack(filename):
         quiz.append(round_data)
 
     return greet_string, quiz
+
+gs, quiz = load_pack('kal5.csv')
+print(gs, quiz)
