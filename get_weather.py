@@ -41,7 +41,6 @@ def get_weather_days(days, city):
         f'https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={long}&exclude=hourly&appid={weather_api}')
     weather = json.loads(weather_req.text)['daily']
 
-    print(weather)
     daily_temp = [round(elem['temp']['day'] - 273.15) for elem in weather][:days]
     daily_pressure = [round(elem['pressure'] / 1.33) for elem in weather][:days]
     daily_humidity = [elem['humidity'] for elem in weather][:days]
@@ -54,12 +53,5 @@ def get_weather_days(days, city):
         resp_pressure.append(f'Pressure: {daily_pressure[i]}')
         resp_wind.append(f'Wind: {daily_wind[i]}')
         resp_humidity.append(f'Humidity: {daily_humidity[i]}')
-    print('111')
-    print(resp_temp)
-    print(resp_wind)
-    print(resp_humidity)
-    print(resp_pressure)
     return [resp_date, resp_temp, resp_pressure, resp_wind, resp_humidity]
 
-
-get_weather_days(3, 'saratov')
