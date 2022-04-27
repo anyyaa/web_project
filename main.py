@@ -7,6 +7,9 @@ import requests
 from get_weather import get_weather, get_weather_days
 from truth_dare import truth, dare, append_truth, append_dare, get_quote
 from translater import translate
+from db_defs import db_getfilename, db_loadpacks, update_results
+from pack_reader import load_pack
+from random import shuffle
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -22,7 +25,85 @@ class Commands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.receiving_answers = False
+        self.getting_packname = False
         self.city = 'saratov'
+        self.packname = None
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if self.receiving_answers:
+            self.answers.append([message.content, message.author])
+        elif self.getting_packname:
+            self.packname = message.content
+
+    @commands.command(name='start_quiz')
+    async def start_quiz(self, ctx):
+        await ctx.send('здарова теперь квиз команды не работают')
+        await ctx.send(db_loadpacks())
+        self.getting_packname = True
+        while True:
+            await asyncio.sleep(5)
+            if self.packname:
+                break
+        self.getting_packname = False
+
+        filename = db_getfilename(self.packname)
+        greet_str, self.pack = load_pack(filename)
+        greet_string = f'Пак {greet_str[0]}, создатели: {greet_str[1]}, дата создания: {greet_str[2]}, количество раундов: {greet_str[3]}'
+        await ctx.send(greet_string)
+        await asyncio.sleep(5)
+
+        self.scores = {}
+
+        for round in range(greet_str[3]):
+            await ctx.send(f'Раунд {self.pack[round][0][1]}')
+            pic_name = self.pack[round][0][3]
+            # картинка
+
+            for quest in range(1, int(self.pack[round][0][2]) + 1):
+                self.answers = []
+                print(self.pack[round])
+                question = self.pack[round][quest][0]
+                answers = self.pack[round][quest][1:]
+                r_ans = answers[-1]
+                shuffle(answers)
+                print(answers)
+
+                answers = '\n'.join(answers)
+
+                await ctx.send(question)
+                await asyncio.sleep(10)
+
+                await ctx.send(f"```{answers}```")
+                self.receiving_answers = True
+                for sec in range(20, -1, -1):
+                    await ctx.send(sec)
+                    await asyncio.sleep(1)
+                self.receiving_answers = False
+
+                if not self.answers:
+                    await ctx.send('нет ответов')
+                else:
+                    for ans, auth in self.answers:
+                        r_auth = None
+                        if ans == r_ans:
+                            r_auth = auth
+                            break
+                    if not r_auth:
+                        await ctx.send('нет правильных ответов')
+                    else:
+                        if r_auth not in self.scores.keys():
+                            self.scores[r_auth] = 1
+                        else:
+                            self.scores[r_auth] += 1
+
+            await ctx.send('раунд окончен')
+            for user in self.scores.keys():
+                await ctx.send(f'{user}:{self.scores[user]}\n')
+
+        for user in self.scores.keys():
+            update_results(self.packname, user, self.scores[user])
 
     @commands.command(name='random_user')
     async def my_randint(self, ctx, min_int, max_int):
