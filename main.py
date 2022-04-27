@@ -90,7 +90,7 @@ class Commands(commands.Cog):
                     for ans, auth in self.answers:
                         r_auth = None
 
-                        if 'Осталось' not in ans and int(ans) - 1 == r_ans:
+                        if ans == str(int(r_ans) + 1):
                             r_auth = auth
                             break
                     if not r_auth:
