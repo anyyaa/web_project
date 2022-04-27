@@ -57,8 +57,9 @@ class Commands(commands.Cog):
         self.scores = {}
 
         for round in range(greet_str[3]):
-            await ctx.send(f'Раунд {self.pack[round][0][1]}')
             pic_name = self.pack[round][0][3]
+            await ctx.send(f'Раунд {self.pack[round][0][1]}', file=discord.File('gg.jpg'))
+
             # картинка
 
             for quest in range(1, int(self.pack[round][0][2]) + 1):
@@ -68,8 +69,9 @@ class Commands(commands.Cog):
                 answers = self.pack[round][quest][1:]
                 r_ans = answers[-1]
                 shuffle(answers)
+                r_ans = answers.index(r_ans)
+                answers = [' '.join([str(i + 1), answers[i]]) for i in range(len(answers))]
                 print(answers)
-
                 answers = '\n'.join(answers)
 
                 await ctx.send(question)
@@ -77,9 +79,9 @@ class Commands(commands.Cog):
 
                 await ctx.send(f"```{answers}```")
                 self.receiving_answers = True
-                for sec in range(20, -1, -1):
-                    await ctx.send(sec)
-                    await asyncio.sleep(1)
+                for sec in range(20, -1, -5):
+                    await ctx.send(f"Осталось {sec} с")
+                    await asyncio.sleep(5)
                 self.receiving_answers = False
 
                 if not self.answers:
@@ -87,18 +89,22 @@ class Commands(commands.Cog):
                 else:
                     for ans, auth in self.answers:
                         r_auth = None
-                        if ans == r_ans:
+
+                        if 'Осталось' not in ans and int(ans) - 1 == r_ans:
                             r_auth = auth
                             break
                     if not r_auth:
-                        await ctx.send('нет правильных ответов')
+
+                        await ctx.send(f'нет правильных ответов. правильный ответ: {answers[r_ans]}')
                     else:
+                        await ctx.send(f'right answer {r_auth}')
                         if r_auth not in self.scores.keys():
                             self.scores[r_auth] = 1
                         else:
                             self.scores[r_auth] += 1
 
             await ctx.send('раунд окончен')
+            await ctx.send('итоги')
             for user in self.scores.keys():
                 await ctx.send(f'{user}:{self.scores[user]}\n')
 
