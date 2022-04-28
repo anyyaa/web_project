@@ -17,7 +17,7 @@ def create_pack():
         quest_num = int(input('Введите количество вопросов: '))
         filename = input('Введите название файла заставки раунда: ')
 
-        pack.append(['!round', name, quest_num, filename])
+        pack.append(['!round', round_name, quest_num, filename])
 
         for i in range(quest_num):
             quest = input('Введите вопрос: ')
