@@ -102,7 +102,7 @@ class Commands(commands.Cog):
                             break
                     if not r_auth:
 
-                        await ctx.send(f'Никто не дал правильный ответ '
+                        await ctx.send(f'Никто не дал правильный ответ. '
                                        f'Правильный ответ: {answer}')
                     else:
                         await ctx.send(f'Правильно ответил {r_auth}')
@@ -113,10 +113,11 @@ class Commands(commands.Cog):
 
             await ctx.send('Раунд окончен')
             await asyncio.sleep(1)
-            await ctx.send('Итоги раунда:')
-            for user in self.scores.keys():
-                await ctx.send('Игрок \t Счет')
-                await ctx.send(f'{user} \t {self.scores[user]}\n')
+            if self.scores.keys():
+                await ctx.send('Итоги раунда:')
+                for user in self.scores.keys():
+                    await ctx.send('Игрок \t Счет')
+                    await ctx.send(f'{user} \t {self.scores[user]}\n')
 
         for user in self.scores.keys():
             update_results(self.packname, user, self.scores[user])
