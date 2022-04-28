@@ -39,7 +39,12 @@ class Commands(commands.Cog):
 
     @commands.command(name='start_quiz')
     async def start_quiz(self, ctx):
-        await ctx.send('здарова теперь квиз команды не работают')
+
+        await ctx.send('Вы вошли в режим квиза, '
+                       'стандартные команды бота теперь не работают.'
+                       'Выберите пак:')
+        await asyncio.sleep(3)
+
         await ctx.send(db_loadpacks())
         self.getting_packname = True
         while True:
@@ -50,7 +55,8 @@ class Commands(commands.Cog):
 
         filename = db_getfilename(self.packname)
         greet_str, self.pack = load_pack(filename)
-        greet_string = f'Пак {greet_str[0]}, создатели: {greet_str[1]}, дата создания: {greet_str[2]}, количество раундов: {greet_str[3]}'
+        greet_string = f'Пак {greet_str[0]}, создатели: {greet_str[1]}, дата создания: {greet_str[2]}, ' \
+                       f'количество раундов: {greet_str[3]}'
         await ctx.send(greet_string)
         await asyncio.sleep(5)
 
@@ -60,7 +66,7 @@ class Commands(commands.Cog):
             pic_name = self.pack[round][0][3]
             await ctx.send(f'Раунд {self.pack[round][0][1]}', file=discord.File('gg.jpg'))
 
-            # картинка
+            await asyncio.sleep(2)
 
             for quest in range(1, int(self.pack[round][0][2]) + 1):
                 self.answers = []
@@ -85,7 +91,7 @@ class Commands(commands.Cog):
                 self.receiving_answers = False
 
                 if not self.answers:
-                    await ctx.send('нет ответов')
+                    await ctx.send('Никто не дал ответ')
                 else:
                     for ans, auth in self.answers:
                         r_auth = None
@@ -95,18 +101,21 @@ class Commands(commands.Cog):
                             break
                     if not r_auth:
 
-                        await ctx.send(f'нет правильных ответов. правильный ответ: {answers[r_ans]}')
+                        await ctx.send(f'Никто не дал правильный ответ '
+                                       f'Правильный ответ: {answers[r_ans]}')
                     else:
-                        await ctx.send(f'right answer {r_auth}')
+                        await ctx.send(f'Правильно ответил {r_auth}')
                         if r_auth not in self.scores.keys():
                             self.scores[r_auth] = 1
                         else:
                             self.scores[r_auth] += 1
 
-            await ctx.send('раунд окончен')
-            await ctx.send('итоги')
+            await ctx.send('Раунд окончен')
+            await asyncio.sleep(1)
+            await ctx.send('Итоги раунда:')
             for user in self.scores.keys():
-                await ctx.send(f'{user}:{self.scores[user]}\n')
+                await ctx.send('Игрок \t Счет')
+                await ctx.send(f'{user} \t {self.scores[user]}\n')
 
         for user in self.scores.keys():
             update_results(self.packname, user, self.scores[user])
