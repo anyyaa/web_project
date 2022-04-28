@@ -73,6 +73,7 @@ class Commands(commands.Cog):
                 print(self.pack[round])
                 question = self.pack[round][quest][0]
                 answers = self.pack[round][quest][1:]
+                answer = answers[-1]
                 r_ans = answers[-1]
                 shuffle(answers)
                 r_ans = answers.index(r_ans)
@@ -101,8 +102,8 @@ class Commands(commands.Cog):
                             break
                     if not r_auth:
 
-                        await ctx.send(f'Никто не дал правильный ответ '
-                                       f'Правильный ответ: {answers[r_ans]}')
+                        await ctx.send(f'Никто не дал правильный ответ. '
+                                       f'Правильный ответ: {answer}')
                     else:
                         await ctx.send(f'Правильно ответил {r_auth}')
                         if r_auth not in self.scores.keys():
@@ -112,15 +113,16 @@ class Commands(commands.Cog):
 
             await ctx.send('Раунд окончен')
             await asyncio.sleep(1)
-            await ctx.send('Итоги раунда:')
-            for user in self.scores.keys():
-                await ctx.send('Игрок \t Счет')
-                await ctx.send(f'{user} \t {self.scores[user]}\n')
+            if self.scores.keys():
+                await ctx.send('Итоги раунда:')
+                for user in self.scores.keys():
+                    await ctx.send('Игрок \t Счет')
+                    await ctx.send(f'{user} \t {self.scores[user]}\n')
 
         for user in self.scores.keys():
             update_results(self.packname, user, self.scores[user])
 
-    @commands.command(name='random_user')
+    @commands.command(name='random')
     async def my_randint(self, ctx, min_int, max_int):
         num = random.randint(int(min_int), int(max_int))
         await ctx.send(num)
@@ -147,10 +149,6 @@ class Commands(commands.Cog):
         print(json_response)
         resp = json_response["message"]
         await ctx.send(resp)
-
-    @commands.command(name='create_pack')
-    async def create_pack(self, ctx):
-        await ctx.send(f'Для создания пака перейдите по ссылке: ')
 
     @commands.command(name='place')
     async def change_place(self, city='Moscow'):
@@ -201,11 +199,10 @@ class Commands(commands.Cog):
         embed_obj.description = "текст"
         await ctx.send(f"```set_timer - таймер, время указывается в секундах\n"
                        f"cat/dog - рандомные картинки с милыми животными\n"
-                       f"create_pack - создание пака для викторины\n"
                        f"place - смена местаположения для отображения погоды\n"
                        f"current - прогноз погоды на сегодня в указанном местоположении\n"
                        f"weather - прогноз погоды на несколько дней (до 8) в указанном местоположении\n"
-                       f"random_user - рандомный пользователь в канале\n"
+                       f"random - рандомайзер чисел\n"
                        f"truth - задание для правды в правда или действие\n"
                        f"dare - задание для действия в правда или действие\n"
                        f"translate - перевод введенного текста, вводится сначала текст для перевода, "
