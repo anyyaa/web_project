@@ -64,7 +64,7 @@ class Commands(commands.Cog):
 
         for round in range(greet_str[3]):
             pic_name = self.pack[round][0][3]
-            await ctx.send(f'Раунд {self.pack[round][0][1]}', file=discord.File('gg.jpg'))
+            await ctx.send(f'Раунд {self.pack[round][0][1]}', file=discord.File(pic_name))
 
             await asyncio.sleep(2)
 
@@ -86,7 +86,7 @@ class Commands(commands.Cog):
 
                 await ctx.send(f"```{answers}```")
                 self.receiving_answers = True
-                for sec in range(20, -1, -5):
+                for sec in range(20, 0, -5):
                     await ctx.send(f"Осталось {sec} с")
                     await asyncio.sleep(5)
                 self.receiving_answers = False
@@ -115,8 +115,8 @@ class Commands(commands.Cog):
             await asyncio.sleep(1)
             if self.scores.keys():
                 await ctx.send('Итоги раунда:')
+                await ctx.send('Игрок \t Счет')
                 for user in self.scores.keys():
-                    await ctx.send('Игрок \t Счет')
                     await ctx.send(f'{user} \t {self.scores[user]}\n')
 
         for user in self.scores.keys():
@@ -208,7 +208,7 @@ class Commands(commands.Cog):
                        f"translate - перевод введенного текста, вводится сначала текст для перевода, "
                        f"потом язык, на который нужно перевести\n"
                        f"append_dare/append_truth - добавление заданий для правды или действия\n"
-                       f"get_quote - цитаты известных```")
+                       f"quote - цитаты известных```")
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
