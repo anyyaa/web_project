@@ -2,7 +2,7 @@ import sqlite3
 
 
 def db_loadpacks():
-    con = sqlite3.connect("packs.db")
+    con = sqlite3.connect("database/packs.db")
     cur = con.cursor()
     result = cur.execute("""SELECT * FROM packs_list""").fetchall()
     con.close()
@@ -10,7 +10,7 @@ def db_loadpacks():
 
 
 def db_getfilename(pack_name):
-    con = sqlite3.connect("packs.db")
+    con = sqlite3.connect("database/packs.db")
     cur = con.cursor()
     result = cur.execute(f"""SELECT file_name FROM packs_list
     WHERE pack_name='{pack_name}'""").fetchall()
@@ -19,7 +19,7 @@ def db_getfilename(pack_name):
 
 
 def update_results(packname, username, score):
-    con = sqlite3.connect("packs.db")
+    con = sqlite3.connect("database/packs.db")
     cur = con.cursor()
     users = cur.execute(f"""SELECT username FROM results""").fetchall()
     usernames = []
@@ -32,5 +32,3 @@ WHERE username = '{username}' AND {packname} < '{score}'""")
     con.commit()
     con.close()
 
-
-update_results('pack1', 'lfsdlj', 10)
