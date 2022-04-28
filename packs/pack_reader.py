@@ -31,5 +31,5 @@ def load_pack(filename):
     return greet_string, quiz
 
 
-gs, quiz = load_pack('kal5.csv')
+gs, quiz = load_pack('test1.csv')
 print(gs, quiz)

@@ -4,11 +4,11 @@ from discord.ext import commands
 import random, logging
 import asyncio
 import requests
-from get_weather import get_weather, get_weather_days
-from truth_dare import truth, dare, append_truth, append_dare, get_quote
-from translater import translate
-from db_defs import db_getfilename, db_loadpacks, update_results
-from pack_reader import load_pack
+from commands.get_weather import get_weather, get_weather_days
+from commands.truth_dare import truth, dare, append_truth, append_dare, get_quote
+from commands.translater import translate
+from commands.db_defs import db_getfilename, db_loadpacks, update_results
+from packs.pack_reader import load_pack
 from random import shuffle
 
 logger = logging.getLogger('discord')
