@@ -4,7 +4,7 @@ import json
 
 
 def truth():
-    file = open("truth.txt", encoding="utf8")
+    file = open("truth.txt", encoding="windows-1251")
     lines = file.readlines()
     n = random.randint(0, len(lines) - 1)
     file.close()
@@ -12,7 +12,7 @@ def truth():
 
 
 def dare():
-    file = open("dare.txt", encoding="utf8")
+    file = open("dare.txt", encoding="utf-8")
     lines = file.readlines()
     n = random.randint(0, len(lines) - 1)
     file.close()
