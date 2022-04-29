@@ -131,7 +131,7 @@ class Commands(commands.Cog):
     async def timer(self, ctx, seconds):
         resp = f"the timer starts in {seconds} seconds"
         await ctx.send(resp)
-        await asyncio.sleep(seconds)
+        await asyncio.sleep(int(seconds))
         await ctx.send('the time x has come')
 
     @commands.command(name='cat')
@@ -208,7 +208,7 @@ class Commands(commands.Cog):
                        f"translate - перевод введенного текста, вводится сначала текст для перевода, "
                        f"потом язык, на который нужно перевести\n"
                        f"append_dare/append_truth - добавление заданий для правды или действия\n"
-                       f"get_quote - цитаты известных```")
+                       f"quote - цитаты известных```")
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
