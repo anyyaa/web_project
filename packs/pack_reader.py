@@ -7,7 +7,7 @@ def load_pack(filename):
     :param filename:
     :return:
     '''
-    file = open(filename, mode='r', encoding='windows-1251')
+    file = open(f'packs/{filename}', mode='r', encoding='utf-8')
     reader = csv.reader(file, delimiter=';', quotechar='"')
     data = list(reader)
 
@@ -34,7 +34,3 @@ def load_pack(filename):
         quiz.append(round_data)
 
     return greet_string, quiz
-
-
-gs, quiz = load_pack('test1.csv')
-print(gs, quiz)
