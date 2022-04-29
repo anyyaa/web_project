@@ -5,6 +5,12 @@ translator = Translator()
 
 
 def translate(text, lang):
+    '''
+    Переводчик
+    :param text:
+    :param lang:
+    :return:
+    '''
     text = ' '.join(text)
     try:
         text = int(text)

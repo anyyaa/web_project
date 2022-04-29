@@ -8,6 +8,11 @@ date = datetime.datetime.today()
 
 
 def get_weather(city):
+    '''
+    Получить прогноз для города
+    :param city:
+    :return:
+    '''
     geolocator = Nominatim(user_agent='weather-bot')
     location = geolocator.geocode(city)
     lat = location.latitude

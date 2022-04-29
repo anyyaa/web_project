@@ -4,6 +4,10 @@ import json
 
 
 def truth():
+    '''
+    Правда
+    :return:
+    '''
     file = open("truth.txt", encoding="windows-1251")
     lines = file.readlines()
     n = random.randint(0, len(lines) - 1)
@@ -12,6 +16,10 @@ def truth():
 
 
 def dare():
+    '''
+    Действие
+    :return:
+    '''
     file = open("dare.txt", encoding="utf8")
     lines = file.readlines()
     n = random.randint(0, len(lines) - 1)
@@ -20,6 +28,11 @@ def dare():
 
 
 def append_truth(question):
+    '''
+    Добавить правду
+    :param question:
+    :return:
+    '''
     file = open("truth.txt", encoding="latin-1")
     lines = file.readlines()
     lines.append(' '.join(question) + '\n')
@@ -31,6 +44,11 @@ def append_truth(question):
 
 
 def append_dare(action):
+    '''
+    Добавить действие
+    :param action:
+    :return:
+    '''
     file = open("dare.txt", encoding="latin-1")
     lines = file.readlines()
     lines.append(' '.join(action) + '\n')
@@ -42,6 +60,10 @@ def append_dare(action):
 
 
 def get_quote():
+    '''
+    Рандомная цитата
+    :return:
+    '''
     response = requests.get("https://zenquotes.io/api/random")
     json_data = json.loads(response.text)
     quote = json_data[0]['q'] + " -" + json_data[0]['a']

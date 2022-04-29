@@ -2,6 +2,11 @@ import csv
 
 
 def load_pack(filename):
+    '''
+    Загрузить пак из csv
+    :param filename:
+    :return:
+    '''
     file = open(filename, mode='r', encoding='windows-1251')
     reader = csv.reader(file, delimiter=';', quotechar='"')
     data = list(reader)

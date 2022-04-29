@@ -2,6 +2,10 @@ import csv
 
 
 def create_pack():
+    '''
+    Создать пак из ввода
+    :return:
+    '''
 
     name = input('Введите название пака: ')
     authors = input('Введите авторов пака: ')

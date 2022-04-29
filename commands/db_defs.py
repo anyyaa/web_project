@@ -2,6 +2,10 @@ import sqlite3
 
 
 def db_loadpacks():
+    '''
+    Загрузить список паков
+    :return:
+    '''
     con = sqlite3.connect("database/packs.db")
     cur = con.cursor()
     result = cur.execute("""SELECT * FROM packs_list""").fetchall()
@@ -10,6 +14,11 @@ def db_loadpacks():
 
 
 def db_getfilename(pack_name):
+    '''
+    Получить по названию пака его файл
+    :param pack_name:
+    :return:
+    '''
     con = sqlite3.connect("database/packs.db")
     cur = con.cursor()
     result = cur.execute(f"""SELECT file_name FROM packs_list
@@ -19,6 +28,13 @@ def db_getfilename(pack_name):
 
 
 def update_results(packname, username, score):
+    '''
+    Обновить таблицу рекордов
+    :param packname:
+    :param username:
+    :param score:
+    :return:
+    '''
     con = sqlite3.connect("database/packs.db")
     cur = con.cursor()
     users = cur.execute(f"""SELECT username FROM results""").fetchall()

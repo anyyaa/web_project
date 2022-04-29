@@ -32,6 +32,11 @@ class Commands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        '''
+        Реакция на текстовое сообщение
+        :param message:
+        :return:
+        '''
         if self.receiving_answers:
             self.answers.append([message.content, message.author])
         elif self.getting_packname:
@@ -39,9 +44,14 @@ class Commands(commands.Cog):
 
     @commands.command(name='start_quiz')
     async def start_quiz(self, ctx):
+        '''
+        Проведение викторины
+        :param ctx:
+        :return:
+        '''
 
-        await ctx.send('Вы вошли в режим квиза, '
-                       'стандартные команды бота теперь не работают.'
+        await ctx.send('Вы вошли в режим квиза, \n'
+                       'стандартные команды бота теперь не работают.\n'
                        'Выберите пак:')
         await asyncio.sleep(3)
 
@@ -124,11 +134,24 @@ class Commands(commands.Cog):
 
     @commands.command(name='random')
     async def my_randint(self, ctx, min_int, max_int):
+        '''
+        Рандомное число
+        :param ctx:
+        :param min_int:
+        :param max_int:
+        :return:
+        '''
         num = random.randint(int(min_int), int(max_int))
         await ctx.send(num)
 
     @commands.command(name='set_timer')
     async def timer(self, ctx, seconds):
+        '''
+        Таймер
+        :param ctx:
+        :param seconds:
+        :return:
+        '''
         resp = f"the timer starts in {seconds} seconds"
         await ctx.send(resp)
         await asyncio.sleep(seconds)
@@ -136,6 +159,11 @@ class Commands(commands.Cog):
 
     @commands.command(name='cat')
     async def cat(self, ctx):
+        '''
+        Рандом картинка с котиками
+        :param ctx:
+        :return:
+        '''
         response = requests.get("https://api.thecatapi.com/v1/images/search")
         json_response = response.json()
         resp = json_response[0]["url"]
@@ -143,6 +171,11 @@ class Commands(commands.Cog):
 
     @commands.command(name='dog')
     async def dog(self, ctx):
+        '''
+        Рандом картинка с собаками
+        :param ctx:
+        :return:
+        '''
         response = requests.get("https://dog.ceo/api/breeds/image/random")
         print(response)
         json_response = response.json()
@@ -152,6 +185,11 @@ class Commands(commands.Cog):
 
     @commands.command(name='place')
     async def change_place(self, city='Moscow'):
+        '''
+        Изменить город для прогноза
+        :param city:
+        :return:
+        '''
         self.city = city
 
     @commands.command(name='current')
