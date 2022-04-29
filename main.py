@@ -154,7 +154,7 @@ class Commands(commands.Cog):
         '''
         resp = f"the timer starts in {seconds} seconds"
         await ctx.send(resp)
-        await asyncio.sleep(seconds)
+        await asyncio.sleep(int(seconds))
         await ctx.send('the time x has come')
 
     @commands.command(name='cat')
